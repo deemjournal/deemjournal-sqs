@@ -42,6 +42,11 @@ const router = {
             future: null
         };
 
+        // Cart page className
+        if ( this.element[ 0 ].classList.contains( "cart" ) ) {
+          core.dom.html.addClass( `is-cart-page` );
+        }
+
         this.bindEmpty();
 
         core.log( "[Router initialized]", this );
@@ -222,6 +227,8 @@ const router = {
         if ( this.state.now.tag && !this.state.future.tag ) {
             core.dom.html.removeClass( `is-tag-page` );
         }
+
+        core.dom.html.removeClass( `is-cart-page` );
     },
 
 

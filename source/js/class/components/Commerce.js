@@ -63,7 +63,6 @@ class Commerce {
         this.cart = this.element.is( "#sqs-cart-root" ) ? this.element : [];
         this.view = this.shop.length ? shopView : productView;
         this.data = this.shop.length ? { items: this.parsed } : { item: this.parsed };
-        this.cartData = {};
 
         this.init();
         this.exec();
@@ -80,7 +79,7 @@ class Commerce {
                 additionalFields: null
             };
 
-            this.addCart( payload, () => {
+            this.addCart( payload, ( /*response*/ ) => {
                 if ( window.Y.Squarespace.Commerce.isExpressCheckout() ) {
                     window.Y.Squarespace.Commerce.goToCheckoutPage();
 
@@ -99,8 +98,9 @@ class Commerce {
             const value = target.is( ".js-cart-qty-min" ) ? target.next( ".js-cart-qty-val" ) : target.prev( ".js-cart-qty-val" );
             const price = entry.find( ".js-cart-price" );
             const total = this.cart.find( ".js-cart-subtotal" );
+            const cartBox = $( ".absolute-cart-box" );
             const entryData = entry.data();
-            const item = this.cartData.shopJSON.items.find(( itm ) => {
+            const item = this.shopJSON.items.find(( itm ) => {
                 return (itm.id === entryData.itemId);
             });
             const qtyMath = target.is( ".js-cart-qty-min" ) ? -1 : 1;
@@ -112,10 +112,12 @@ class Commerce {
             price[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( item.structuredContent.variants[ 0 ].price * qty );
 
             this.qtyCart( qty, entryData.entryId ).then(( response ) => {
-                total[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( response.grandTotal.value );
+                total[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( response.subtotal.value );
+                cartBox.find( ".price" )[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( response.subtotal.value ).replace( /\.00$/, "" );
 
                 if ( qty === 0 ) {
                     entry.remove();
+                    cartBox.remove();
                 }
             });
         });
@@ -135,18 +137,24 @@ class Commerce {
 
 
     init () {
+        const cartBox = $( ".absolute-cart-box" );
+
         if ( this.cart.length ) {
             window.Squarespace.initializeCartPage( window.Y );
             this.fetchShop().then(( shopResponse ) => {
-                this.cartData.shopJSON = shopResponse;
+                this.shopJSON = shopResponse;
+                this.cartJSON = this.data.item.cart;
 
                 this.fetchCart().then(( cartResponse ) => {
-                    this.cartData.cartJSON = cartResponse;
-                    this.cart[ 0 ].innerHTML = cartView( shopResponse, cartResponse );
+                    this.cart[ 0 ].innerHTML = cartView( this.shopJSON, this.cartJSON, cartResponse );
                     core.util.loadImages( this.cart.find( core.config.lazyImageSelector ), core.util.noop );
                     this.bindCart();
                 });
             });
+
+            if ( cartBox.length ) {
+              cartBox[ 0 ].style.display = "none";
+            }
 
         } else {
             window.Squarespace.initializeCommerce( window.Y );
@@ -206,7 +214,7 @@ class Commerce {
                 this.addCart( payload, callback );
 
             } else if ( callback ) {
-                callback();
+                callback( response );
             }
         })
         .catch(( response ) => {
@@ -243,7 +251,13 @@ class Commerce {
 
 
     destroy () {
+        const cartBox = $( ".absolute-cart-box" );
+
         this.controllers.destroy();
+
+        if ( cartBox.length ) {
+          cartBox[ 0 ].style.display = "block";
+        }
 
         if ( this.stack ) {
             this.stack.destroy();

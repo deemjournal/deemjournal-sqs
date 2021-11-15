@@ -293,9 +293,8 @@
     }
 
     .cart__title {
-        p {
-            @include font-family-sans-medium();
-        }
+        @include p();
+        @include font-family-sans-medium();
     }
 
     .cart__attrs {

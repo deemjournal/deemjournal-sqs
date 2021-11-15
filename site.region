@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="{.if collection.homepage}is-home-page{.end} is-{collection.title|slugify}-page {.if item}is-uid-page{.end} is-site-intro">
+<html class="{.if collection.homepage}is-home-page{.end} {.if collection.title}is-{collection.title|slugify}-page{.end} {.if item}is-uid-page{.end} is-site-intro">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

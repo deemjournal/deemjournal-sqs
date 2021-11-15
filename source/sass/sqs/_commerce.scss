@@ -19,3 +19,96 @@
         @include sqs-alert-button();
     }
 }
+
+.absolute-cart-box {
+    top: auto !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    padding-right: $padding-1 !important;
+    padding-bottom: $padding-1 !important;
+
+    .is-cart-page & {
+        display: none !important;
+    }
+
+    @include respond( $mobile-breakpoint ) {
+        padding-left: $padding-m;
+        padding-bottom: $padding-m;
+    }
+
+    .sqs-pill-shopping-cart-content {
+        min-width: 0 !important;
+        background: transparent !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        @include button-pseudo();
+        cursor: pointer !important;
+        line-height: 1 !important;
+        height: $button-height !important;
+        width: $button-width !important;
+
+        &:before {
+            background-color: $black !important;
+        }
+
+        @include respond( $laptop-breakpoint ) {
+            height: $button-height-l !important;
+            width: $button-width-l !important;
+        }
+    
+        @include respond( $mobile-breakpoint ) {
+            height: $button-height-m !important;
+            width: $button-width-m !important;
+        }
+
+        .icon,
+        .subtotal {
+            display: inline-block !important;
+        }
+
+        .icon {
+            background: none !important;
+            position: relative;
+            width: auto !important;
+            height: auto !important;
+            top: auto !important;
+            margin: 0 !important;
+
+            &:before {
+                content: "Cart";
+            }
+        }
+
+        .icon,
+        .details,
+        .subtotal .price {
+            color: $white !important;
+            font-size: $h6-size-mobile !important;
+            line-height: $h6-line !important;
+            font-weight: normal !important;
+            @include font-family-sans();
+        
+            @include respond-min( $mobile-breakpoint ) {
+                font-size: $h6-size-fluid !important;
+            }
+        
+            @include respond-min( $desktop-breakpoint ) {
+                font-size: $h6-size-max !important;
+            }
+        }
+
+        .subtotal {
+            position: relative !important;
+            right: auto !important;
+            top: auto !important;
+            margin-left: 20px !important;
+        }
+
+        .details {
+            display: none !important;
+        }
+    }
+}

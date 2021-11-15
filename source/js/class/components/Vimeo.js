@@ -33,11 +33,17 @@ const _onMessageInstance = ( message, instance ) => {
 
 // Local public window.onmessage binding ( once )
 window.addEventListener( "message", ( e ) => {
-    const message = JSON.parse( e.data );
-    const instance = _instances[ message.player_id ];
+    try {
+      if ( typeof e.data === "string" ) {
+        const message = JSON.parse( e.data );
+        const instance = _instances[ message.player_id ];
 
-    if ( instance ) {
-        _onMessageInstance( message, instance );
+        if ( instance ) {
+            _onMessageInstance( message, instance );
+        }
+      }
+    } catch (error) {
+      console.log("window.onmessage:error", error);
     }
 
 }, false );
