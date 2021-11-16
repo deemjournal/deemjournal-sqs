@@ -1,0 +1,19 @@
+{# Dev Menu #}
+{.equal? collection.urlId "typography"}
+    {@|apply page-typography.block}
+{.or equal? collection.urlId "system-blocks"}
+    {@|apply page-system-blocks.block}
+{.or equal? collection.urlId "iconography"}
+    {@|apply page-iconography.block}
+{.or equal? collection.urlId "dev-cart"}
+    {@|apply page-dev-cart.block}
+{# Main Nav #}
+{.or equal? collection.urlId "stories"}
+    {squarespace.main-content}
+{.or equal? collection.urlId "dev-stories"}
+    {squarespace.main-content}
+{.or equal? collection.urlId "shop"}
+    {squarespace.main-content}
+{.or}
+    {@|apply page-navi.block}
+{.end}

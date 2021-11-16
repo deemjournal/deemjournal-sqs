@@ -112,7 +112,9 @@ const router = {
         this.setState( "future", null );
         this.setClass();
         navi.setActive( this.state.now.view );
-        core.dom.main[ 0 ].innerHTML = this.doc.html;
+        // if ( !core.env.isConfig() ) {
+        //     core.dom.main[ 0 ].innerHTML = this.doc.html;
+        // }
         this.topper();
         this.controllers.exec();
         navi.doResize();
