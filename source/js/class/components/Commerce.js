@@ -63,6 +63,7 @@ class Commerce {
         this.cart = this.element.is( "#sqs-cart-root" ) ? this.element : [];
         this.view = this.shop.length ? shopView : productView;
         this.data = this.shop.length ? { items: this.parsed } : { item: this.parsed };
+        this.cartBox = $( ".absolute-cart-box" );
 
         this.init();
         this.exec();
@@ -98,7 +99,6 @@ class Commerce {
             const value = target.is( ".js-cart-qty-min" ) ? target.next( ".js-cart-qty-val" ) : target.prev( ".js-cart-qty-val" );
             const price = entry.find( ".js-cart-price" );
             const total = this.cart.find( ".js-cart-subtotal" );
-            const cartBox = $( ".absolute-cart-box" );
             const entryData = entry.data();
             const item = this.shopJSON.items.find(( itm ) => {
                 return (itm.id === entryData.itemId);
@@ -113,11 +113,9 @@ class Commerce {
 
             this.qtyCart( qty, entryData.entryId ).then(( response ) => {
                 total[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( response.subtotal.value );
-                cartBox.find( ".price" )[ 0 ].innerText = window.Y.Squarespace.Commerce.moneyString( response.subtotal.value ).replace( /\.00$/, "" );
 
                 if ( qty === 0 ) {
                     entry.remove();
-                    cartBox.remove();
                 }
             });
         });
@@ -137,8 +135,6 @@ class Commerce {
 
 
     init () {
-        const cartBox = $( ".absolute-cart-box" );
-
         if ( this.cart.length ) {
             window.Squarespace.initializeCartPage( window.Y );
             this.fetchShop().then(( shopResponse ) => {
@@ -151,10 +147,6 @@ class Commerce {
                     this.bindCart();
                 });
             });
-
-            if ( cartBox.length ) {
-              cartBox[ 0 ].style.display = "none";
-            }
 
         } else {
             window.Squarespace.initializeCommerce( window.Y );
@@ -251,13 +243,7 @@ class Commerce {
 
 
     destroy () {
-        const cartBox = $( ".absolute-cart-box" );
-
         this.controllers.destroy();
-
-        if ( cartBox.length ) {
-          cartBox[ 0 ].style.display = "block";
-        }
 
         if ( this.stack ) {
             this.stack.destroy();

@@ -45,6 +45,7 @@ const router = {
         // Cart page className
         if ( this.element[ 0 ].classList.contains( "cart" ) ) {
           core.dom.html.addClass( `is-cart-page` );
+          core.dom.body.find( "a" ).addClass( "js-router--ignore" );
         }
 
         this.bindEmpty();

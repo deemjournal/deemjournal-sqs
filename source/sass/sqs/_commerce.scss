@@ -27,10 +27,6 @@
     padding-right: $padding-1 !important;
     padding-bottom: $padding-1 !important;
 
-    .is-cart-page & {
-        display: none !important;
-    }
-
     @include respond( $mobile-breakpoint ) {
         padding-left: $padding-m;
         padding-bottom: $padding-m;
